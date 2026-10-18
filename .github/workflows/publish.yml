@@ -1,0 +1,77 @@
+# Publishes this n8n community node to npm on version tag push.
+# Required for n8n Creator Portal verification (provenance).
+#
+# Auth options (either works):
+# - npm Trusted Publisher (OIDC) for this repo + publish.yml
+# - NPM_TOKEN repo secret (classic automation/publish token)
+#
+# Release: bump version, push tag *.*.* → this workflow.
+# Note: --ignore-scripts skips n8n-node prerelease (blocks direct publish);
+# build already ran in the previous step.
+
+name: Publish
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve publish auth
+        id: publish_auth
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -n "${NPM_TOKEN:-}" ]; then
+            echo "mode=token" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=oidc" >> "$GITHUB_OUTPUT"
+          fi
+
+      # OIDC: omit registry-url so setup-node does not write an empty
+      # _authToken=${NODE_AUTH_TOKEN} line that blocks Trusted Publisher.
+      - name: Set up Node.js (OIDC)
+        if: steps.publish_auth.outputs.mode == 'oidc'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+
+      - name: Set up Node.js (token)
+        if: steps.publish_auth.outputs.mode == 'token'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Configure npm auth
+        if: steps.publish_auth.outputs.mode == 'token'
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish (token)
+        if: steps.publish_auth.outputs.mode == 'token'
+        run: npm publish --access public --provenance --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish (OIDC)
+        if: steps.publish_auth.outputs.mode == 'oidc'
+        run: npm publish --access public --provenance --ignore-scripts

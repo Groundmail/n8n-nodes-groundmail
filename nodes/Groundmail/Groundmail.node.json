@@ -1,0 +1,18 @@
+{
+	"node": "n8n-nodes-groundmail.groundmail",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Communication", "Marketing & Content"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://docs.groundmail.dev/authentication"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://docs.groundmail.dev/guides/n8n"
+			}
+		]
+	}
+}
