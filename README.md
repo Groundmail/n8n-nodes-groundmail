@@ -10,7 +10,7 @@
 <h1 align="center">Groundmail for n8n</h1>
 
 <p align="center">
-  An <a href="https://n8n.io">n8n</a> community node for the Groundmail transactional email API.<br>
+  An <a href="https://n8n.io">n8n</a> community node for the Groundmail API.<br>
   Send welcome emails, alerts and receipts from any workflow, then check their delivery status.
 </p>
 
@@ -89,8 +89,8 @@ Use **Email → Get** with that `id` to check delivery later, or **Email → Get
 
 ## Why Groundmail
 
-- **Our own mail servers and IP space.** Your password resets and receipts don't share a pool with bulk marketing senders.
-- **Transactional email only.** No newsletters or cold outreach on the platform, which keeps the sending reputation clean.
+- **Separate streams.** Your sign-in codes never wait behind a newsletter.
+- **We run the servers.** Our own mail servers and IP space, so we can see and fix delivery problems ourselves.
 - **Start free.** 3,000 emails a month on the Free plan; Pro is 50,000 emails for $20/month. Dedicated IPs on Scale.
 - **Built for code and for agents.** REST API, SMTP, SDKs for Node, Python, Go, PHP and Ruby, a CLI, and an MCP server for Claude, ChatGPT and Cursor.
 
