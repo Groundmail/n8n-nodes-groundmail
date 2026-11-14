@@ -1,7 +1,7 @@
 {
   "name": "n8n-nodes-groundmail",
-  "version": "0.1.3",
-  "description": "n8n community node for Groundmail (transactional email API)",
+  "version": "0.1.7",
+  "description": "n8n community node for Groundmail",
   "license": "MIT",
   "homepage": "https://docs.groundmail.dev/guides/n8n",
   "keywords": [

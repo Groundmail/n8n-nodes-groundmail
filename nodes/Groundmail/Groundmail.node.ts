@@ -27,6 +27,7 @@ export class Groundmail implements INodeType {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json',
+				'User-Agent': 'groundmail-n8n/0.1.7',
 			},
 		},
 		properties: [
